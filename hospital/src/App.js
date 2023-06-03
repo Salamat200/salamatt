@@ -1,26 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
+import HospitalLandingPage from '../../clinic/clinic-frontend/src/components/HospitalLandingPage';
+import Sidebar from '../../clinic/clinic-frontend/src/Sidebar';
+import './App.css'
+import Login from '../../clinic/clinic-frontend/src/components/Login';
+import { BrowserRouter as Route, Router, Routes } from 'react-router-dom'
+import Complaints from '../../clinic/clinic-frontend/src/components/Complaints';
+import Register from '../../clinic/clinic-frontend/src/components/Register';
+import Profile from '../../clinic/clinic-frontend/src/components/Profile';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+      <div> 
+        <Sidebar />
+        <HospitalLandingPage />
+        <Login />
+        <Complaints />
+        <Register />
+        <Profile />
+       </div>
+
   );
 }
 
