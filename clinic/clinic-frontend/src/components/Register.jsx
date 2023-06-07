@@ -1,35 +1,43 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 function Register() {
   const [name, setName] = useState('');
-  const [matriculationNumber, setMatriculationNumber] = useState('');
+  const [password, setPassword] = useState('');
   const [year, setYear] = useState('');
   const [email, setEmail] = useState('');
+  const [dept, setDept] = useState('');
   const [gender, setGender] = useState('');
-
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
-  
-  const handleSubmit = e => {
+  const redirect = useNavigate()
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
 
-    // Send registration data to the backend
-    // Example API call:
-    fetch('/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Handle response from the backend if needed
-        console.log(data);
-      })
-      .catch(error => console.log(error));
+    try {
+      const response = await axios.post('http://localhost:3000/users', {
+        name,
+        password,
+        email,
+        year,
+        dept,
+        gender,
+      });
+
+      setName(''),
+        setPassword(''),
+        setYear(''),
+        setEmail(''),
+        setDept(''),
+        setGender('')
+      // Handle successful login
+      console.log(response.data);
+      redirect('/login')
+
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
   };
 
   return (
@@ -44,55 +52,29 @@ function Register() {
             onChange={e => setName(e.target.value)}
           />
         </div>
-
-
-        <div>
-          <label>Matriculation Number:</label>
-          <input
-            type="text"
-            value={matriculationNumber}
-            onChange={e => setMatriculationNumber(e.target.value)}
-          />
-
-        </div>
         <div>
           <label>Year:</label>
           <input
-            type="text"
+            type="number"
             value={year}
             onChange={e => setYear(e.target.value)}
           />
         </div>
-
         <div>
-          <label>Gender</label>
+          <label>Dept:</label>
           <input
-  type="radio"
-  id="male"
-  name="gender"
-  value="male"
-  checked={gender === 'male'}
-  onChange={() => handleGenderChange('male')}
-/>
-<label for="male">Male</label>
-<input
-  type="radio"
-  id="female"
-  name="gender"
-  value="female"
-  checked={gender === 'female'}
-  onChange={() => handleGenderChange('female')}
-/>
-<label for="female">Female</label>
-<input
-  type="radio"
-  id="other"
-  name="gender"
-  value="other"
-  checked={gender === 'other'}
-  onChange={() => handleGenderChange('other')}
-/>
-<label for="other">Other</label>
+            type="text"
+            value={dept}
+            onChange={e => setDept(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Gender:</label>
+          <select value={gender} onChange={(e) => setGender(e.target.value)}>
+            <option value="">Select an option</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+          </select>
         </div>
 
         <div>
@@ -103,7 +85,15 @@ function Register() {
             onChange={e => setEmail(e.target.value)}
           />
         </div>
+        <div>
+          <label>Passsword:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
 
+        </div>
         <button type="submit">Register</button>
       </form>
     </div>
