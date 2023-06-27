@@ -1,33 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { useParams } from "react-router-dom";
 
-function Profile () {
-  const [user, setUser] = useState(null);
+function Profile() {
+  const [profile, setProfile] = useState('');
+  const { id } = useParams();
 
   useEffect(() => {
-    // Fetch user profile data from the backend
-    // Update the "user" state with the fetched data
-    // Example API call:
-    fetch('/api/profile')
-      .then(response => response.json())
-      .then(data => setUser(data))
-      .catch(error => console.log(error));
-  }, []);
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/profile/${id}`);
+        const { profileData } = response.data;
+        setProfile(profileData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProfileData();
+  }, [id]);
+
 
   return (
     <div>
       <h2>Profile</h2>
-      {user ? (
-        <div>
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email}</p>
-          <p>Gender: {user.gender}</p>
-          {/* Add other profile details */}
-        </div>
-      ) : (
-        <p>Loading profile...</p>
-      )}
+      <div>
+        <p>ID: {id}</p>
+        <p>Symptoms: {profile.name}</p>
+        <p>Email: {profile.email}</p>
+        <p>Department: {profile.dept}</p>
+        <p>Gender: {profile.gender}</p>
+      </div>
     </div>
   );
-};
+}
 
 export default Profile;
